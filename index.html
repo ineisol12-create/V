@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Playlist at Valentine Day</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f7e8eb;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      color: #333;
+    }
+
+    /* Password Gate */
+    #password-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f7e8eb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+
+    .pass-card {
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(184, 15, 38, 0.15);
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+    }
+
+    .pass-card h2 {
+      font-family: 'Great Vibes', cursive;
+      color: #b80f26;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pass-card input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #f0c2cb;
+      border-radius: 10px;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .pass-card input:focus {
+      border-color: #b80f26;
+    }
+
+    .pass-card button {
+      background: #b80f26;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .pass-card button:hover {
+      background: #960b1e;
+      transform: scale(1.05);
+    }
+
+    .error-msg {
+      color: #b80f26;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    /* Container Layout */
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .brand-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2rem;
+      color: #7b1220;
+    }
+
+    .main-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #b80f26;
+      line-height: 1.1;
+    }
+
+    .sub-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: #7b1220;
+      margin-top: -5px;
+    }
+
+    /* Interactive Elements */
+    .main-content {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Vinyl Animation */
+    .vinyl-wrapper {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin-left: 60px;
+      margin-top: -10px;
+      margin-bottom: -100px;
+      z-index: 1;
+    }
+
+    .vinyl {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #222 18%, #111 20%, #222 21%, #111 40%, #222 41%, #111 60%, #222 61%, #000 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      animation: spin 10s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .vinyl-label {
+      width: 85px;
+      height: 85px;
+      background: #b80f26;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 5px;
+      border: 3px solid #111;
+      position: relative;
+    }
+
+    .vinyl-text {
+      color: #ffffff;
+      font-size: 0.55rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+
+    .vinyl-hole {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #f7e8eb;
+      border-radius: 50%;
+      border: 1px solid #7b1220;
+    }
+
+    /* Playlist Section */
+    .playlist-card {
+      background: #a30c22;
+      border-radius: 20px;
+      padding: 1.8rem 1.5rem;
+      width: 88%;
+      color: white;
+      box-shadow: 0 12px 30px rgba(163, 12, 34, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .song-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .song-item {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .song-item:hover, .song-item.active {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .song-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .song-artist {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      font-weight: 300;
+    }
+
+    .heart-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      background: #f7e8eb;
+      clip-path: polygon(50% 15%, 65% 0, 85% 0, 100% 20%, 100% 45%, 50% 90%, 0 45%, 0 20%, 15% 0, 35% 0);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .heart-icon:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Floating Icons */
+    .music-note {
+      position: absolute;
+      color: #b80f26;
+      font-size: 1.5rem;
+      animation: float 3s ease-in-out infinite alternate;
+    }
+
+    .note-1 { top: 120px; right: 25px; animation-delay: 0s; }
+    .note-2 { top: 200px; right: 50px; animation-delay: 0.5s; }
+    .star-1 { position: absolute; bottom: 80px; left: 30px; color: #b80f26; font-size: 1.2rem; }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-10px) rotate(10deg); }
+    }
+
+    /* Photos Section (Added at the bottom) */
+    .photos-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 2.5rem;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 8px 8px 20px 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      width: 110px;
+      transition: transform 0.3s;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-5deg); }
+    .polaroid:nth-child(2) { transform: rotate(3deg); }
+    .polaroid:nth-child(3) { transform: rotate(-3deg); }
+
+    .polaroid:hover {
+      transform: scale(1.08) rotate(0deg);
+      z-index: 5;
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password Screen -->
+  <div id="password-screen">
+    <div class="pass-card">
+      <h2>Enter Password</h2>
+      <input type="password" id="password-input" placeholder="Enter password..." />
+      <button onclick="checkPassword()">Unlock</button>
+      <div id="error-msg" class="error-msg">Incorrect password! Try again.</div>
+    </div>
+  </div>
+
+  <!-- Main Webpage -->
+  <div class="container" id="main-content">
+    <div class="header">
+      <div class="brand-title">Edit + Me</div>
+      <div class="main-title">My Playlist</div>
+      <div class="sub-title">at Valentine Day</div>
+    </div>
+
+    <div class="main-content">
+      <div class="music-note note-1">♪</div>
+      <div class="music-note note-2">♫</div>
+
+      <!-- Vinyl Record -->
+      <div class="vinyl-wrapper">
+        <div class="vinyl" id="vinyl">
+          <div class="vinyl-label">
+            <span class="vinyl-text">If you make my heart sing like a love song</span>
+            <div class="vinyl-hole"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlist -->
+      <div class="playlist-card">
+        <div class="heart-icon" id="play-btn"></div>
+        <ol class="song-list">
+          <li class="song-item active" onclick="playSong()">
+            <span class="song-title">1. You Belong With Me</span>
+            <span class="song-artist">- Taylor Swift</span>
+          </li>
+          <li class="song-item" onclick="playSong()">
+            <span class="song-title">2. Lover</span>
+            <span class="song-artist">- Taylor Swift</span>
+          </li>
+          <li class="song-item" onclick="playSong()">
+            <span class="song-title">3. Love Story</span>
+            <span class="song-artist">- Taylor Swift</span>
+          </li>
+          <li class="song-item" onclick="playSong()">
+            <span class="song-title">4. Enchanted</span>
+            <span class="song-artist">- Taylor Swift</span>
+          </li>
+          <li class="song-item" onclick="playSong()">
+            <span class="song-title">5. Fearless</span>
+            <span class="song-artist">- Taylor Swift</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="star-1">★</div>
+    </div>
+
+    <!-- All Pictures Added at the End -->
+    <div class="photos-grid">
+      <div class="polaroid">
+        <img src="https://i.ibb.co/L5kLWWj/5051570ea6c5956fef76a40b8cf956fc.jpg" alt="Written by Taylor Swift CD">
+      </div>
+      <div class="polaroid">
+        <img src="https://i.ibb.co/LpXpT09/effbe35cbed626bd5fde783bb27aad00.jpg" alt="I Love You Cutouts">
+      </div>
+      <div class="polaroid">
+        <img src="https://i.ibb.co/9vM70y9/82228426d157b64b4359ef0da10e48fd.jpg" alt="I Like You A Lot Heart">
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio-player"></audio>
+
+  <script>
+    function checkPassword() {
+      const input = document.getElementById('password-input').value;
+      const error = document.getElementById('error-msg');
+      
+      if (input === '-Love') {
+        const passScreen = document.getElementById('password-screen');
+        passScreen.style.opacity = '0';
+        setTimeout(() => {
+          passScreen.style.visibility = 'hidden';
+          document.getElementById('main-content').classList.add('visible');
+        }, 600);
+      } else {
+        error.style.display = 'block';
+      }
+    }
+
+    const audioPlayer = document.getElementById('audio-player');
+    const vinyl = document.getElementById('vinyl');
+    const playBtn = document.getElementById('play-btn');
+
+    // Playing Taylor Swift - You Belong With Me audio from the clip
+    audioPlayer.src = "https://files.catbox.moe/u8o0b2.mp3";
+    let isPlaying = false;
+
+    function playSong() {
+      if (!isPlaying) {
+        audioPlayer.play();
+        vinyl.classList.add('playing');
+        isPlaying = true;
+      } else {
+        audioPlayer.pause();
+        vinyl.classList.remove('playing');
+        isPlaying = false;
+      }
+    }
+
+    playBtn.addEventListener('click', playSong);
+  </script>
+</body>
+  </html>
+  
