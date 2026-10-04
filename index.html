@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Playlist at Valentine Day</title>
+  <title>You and I</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -141,7 +141,7 @@
       margin-top: -5px;
     }
 
-    /* Interactive Elements */
+    /* Main Content Styling */
     .main-content {
       position: relative;
       width: 100%;
@@ -214,7 +214,7 @@
       border: 1px solid #7b1220;
     }
 
-    /* Playlist Section */
+    /* Playlist Card */
     .playlist-card {
       background: #a30c22;
       border-radius: 20px;
@@ -274,7 +274,7 @@
       transform: translateY(-50%) scale(1.1);
     }
 
-    /* Floating Icons */
+    /* Floating Decor */
     .music-note {
       position: absolute;
       color: #b80f26;
@@ -312,7 +312,6 @@
 
     .polaroid:nth-child(1) { transform: rotate(-5deg); }
     .polaroid:nth-child(2) { transform: rotate(3deg); }
-    .polaroid:nth-child(3) { transform: rotate(-3deg); }
 
     .polaroid:hover {
       transform: scale(1.08) rotate(0deg);
@@ -343,7 +342,7 @@
   <div class="container" id="main-content">
     <div class="header">
       <div class="brand-title">Edit + Me</div>
-      <div class="main-title">My Playlist</div>
+      <div class="main-title">You and I</div>
       <div class="sub-title">at Valentine Day</div>
     </div>
 
@@ -365,23 +364,23 @@
       <div class="playlist-card">
         <div class="heart-icon" id="play-btn"></div>
         <ol class="song-list">
-          <li class="song-item active" onclick="playSong()">
+          <li class="song-item active" onclick="playSong(this)">
             <span class="song-title">1. You Belong With Me</span>
             <span class="song-artist">- Taylor Swift</span>
           </li>
-          <li class="song-item" onclick="playSong()">
+          <li class="song-item" onclick="playSong(this)">
             <span class="song-title">2. Lover</span>
             <span class="song-artist">- Taylor Swift</span>
           </li>
-          <li class="song-item" onclick="playSong()">
+          <li class="song-item" onclick="playSong(this)">
             <span class="song-title">3. Love Story</span>
             <span class="song-artist">- Taylor Swift</span>
           </li>
-          <li class="song-item" onclick="playSong()">
+          <li class="song-item" onclick="playSong(this)">
             <span class="song-title">4. Enchanted</span>
             <span class="song-artist">- Taylor Swift</span>
           </li>
-          <li class="song-item" onclick="playSong()">
+          <li class="song-item" onclick="playSong(this)">
             <span class="song-title">5. Fearless</span>
             <span class="song-artist">- Taylor Swift</span>
           </li>
@@ -391,21 +390,18 @@
       <div class="star-1">★</div>
     </div>
 
-    <!-- Polaroid Pictures -->
+    <!-- Photos Grid with Embedded Images -->
     <div class="photos-grid">
       <div class="polaroid">
-        <img src="5051570ea6c5956fef76a40b8cf956fc.jpg" alt="Written by Taylor Swift CD">
+        <img src="https://i.ibb.co/LpXpT09/effbe35cbed626bd5fde783bb27aad00.jpg" alt="I Love You Cutouts">
       </div>
       <div class="polaroid">
-        <img src="effbe35cbed626bd5fde783bb27aad00.jpg" alt="I Love You Cutouts">
-      </div>
-      <div class="polaroid">
-        <img src="82228426d157b64b4359ef0da10e48fd.jpg" alt="I Like You A Lot Heart">
+        <img src="https://i.ibb.co/9vM70y9/82228426d157b64b4359ef0da10e48fd.jpg" alt="I Like You A Lot Heart">
       </div>
     </div>
   </div>
 
-  <audio id="audio-player"></audio>
+  <audio id="audio-player" src="https://files.catbox.moe/u8o0b2.mp3"></audio>
 
   <script>
     function checkPassword() {
@@ -427,12 +423,16 @@
     const audioPlayer = document.getElementById('audio-player');
     const vinyl = document.getElementById('vinyl');
     const playBtn = document.getElementById('play-btn');
+    const songItems = document.querySelectorAll('.song-item');
 
-    // Local song audio file link
-    audioPlayer.src = "song.mp3";
     let isPlaying = false;
 
-    function playSong() {
+    function playSong(selectedItem) {
+      if (selectedItem) {
+        songItems.forEach(item => item.classList.remove('active'));
+        selectedItem.classList.add('active');
+      }
+
       if (!isPlaying) {
         audioPlayer.play();
         vinyl.classList.add('playing');
@@ -444,7 +444,7 @@
       }
     }
 
-    playBtn.addEventListener('click', playSong);
+    playBtn.addEventListener('click', () => playSong());
   </script>
 </body>
 </html>
